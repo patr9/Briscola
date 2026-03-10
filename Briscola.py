@@ -88,51 +88,56 @@ def perform_resize():
 
 #Removes the button/card when clicked
 def on_click(card):
-    global pilecard1img, pile1, pile2
-    card.place_forget()
-    #Updates the played card image in the middle. Currently only updates player 1's card, will need updating
-    if card._name == '!label':
-        p1img1 = getImage(player1_hand[0][3])
-        p1pick.config(image=p1img1)
-        pilecard1img = p1img1
-        pile1 = player1_hand[0]
-    elif card._name == '!label2':
-        p1img2 = getImage(player1_hand[1][3])
-        p1pick.config(image=p1img2)
-        pilecard1img = p1img2
-        pile1 = player1_hand[1]
-    elif card._name == '!label3':
-        p1img3 = getImage(player1_hand[2][3])
-        p1pick.config(image=p1img3)
-        pilecard1img = p1img3
-        pile1 = player1_hand[2]
+    global pilecard1img, p1turn
+    if p1turn:
+        card.place_forget()
+        #Updates the played card image in the middle. Currently only updates player 1's card, will need updating
+        if card._name == '!label':
+            p1img1 = getImage(player1_hand[0][3])
+            p1pick.config(image=p1img1)
+            pilecard1img = p1img1
+            pile1 = player1_hand[0]
+        elif card._name == '!label2':
+            p1img2 = getImage(player1_hand[1][3])
+            p1pick.config(image=p1img2)
+            pilecard1img = p1img2
+            pile1 = player1_hand[1]
+        elif card._name == '!label3':
+            p1img3 = getImage(player1_hand[2][3])
+            p1pick.config(image=p1img3)
+            pilecard1img = p1img3
+            pile1 = player1_hand[2]
+        p1turn = False
 
 def deckClick():
-    global deck, player1_hand, p1handslot1, p1handslot2, p1handslot3
+    global p1turn
+
     #Checks if the deck is empty
     if not deck:
         return("Deck is empty")
     
-    #Checks which hand slot was used and updates that card slot with a new card
-    if not p1handslot1.winfo_ismapped():
-        player1_hand[0] = deck.pop()
-        new_card = getImage(player1_hand[0][3])
-        p1handslot1.config(image=new_card)
-        p1handslot1.image = new_card
-        p1handslot1.place(relx=0.42, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
-    elif not p1handslot2.winfo_ismapped():
-        player1_hand[1] = deck.pop()
-        new_card = getImage(player1_hand[1][3])
-        p1handslot2.config(image=new_card)
-        p1handslot2.image = new_card
-        p1handslot2.place(relx=0.5, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
-    elif not p1handslot3.winfo_ismapped():
-        player1_hand[2] = deck.pop()
-        new_card = getImage(player1_hand[2][3])
-        p1handslot3.config(image=new_card)
-        p1handslot3.image = new_card
-        p1handslot3.place(relx=0.58, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
-        player1_hand.append(deck.pop())
+    if not p1turn:
+        #Checks which hand slot was used and updates that card slot with a new card
+        if not p1handslot1.winfo_ismapped():
+            player1_hand[0] = deck.pop()
+            new_card = getImage(player1_hand[0][3])
+            p1handslot1.config(image=new_card)
+            p1handslot1.image = new_card
+            p1handslot1.place(relx=0.42, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
+        elif not p1handslot2.winfo_ismapped():
+            player1_hand[1] = deck.pop()
+            new_card = getImage(player1_hand[1][3])
+            p1handslot2.config(image=new_card)
+            p1handslot2.image = new_card
+            p1handslot2.place(relx=0.5, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
+        elif not p1handslot3.winfo_ismapped():
+            player1_hand[2] = deck.pop()
+            new_card = getImage(player1_hand[2][3])
+            p1handslot3.config(image=new_card)
+            p1handslot3.image = new_card
+            p1handslot3.place(relx=0.58, rely=0.8, anchor="center", width=screen_width // 12, height=screen_height // 6)
+            player1_hand.append(deck.pop())
+        p1turn = True
 
 #Waits for user to stop resizing the window before resizing all cards/images
 def on_window_resize(event):
@@ -180,6 +185,8 @@ values2 = {
     'knight': 3,
     'jack': 2,
 }
+
+p1turn = True
 
 #The 2 piles will be updated everytime a card is played and will hold 1 card value at a time
 pile1 = []
