@@ -9,7 +9,7 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 #Replaces the filepath name to get only the card name
 def getCards(cards):
-    char_to_replace = {"/Users/p/Documents/Briscola/assets/cards/": '', ".png": ''}
+    char_to_replace = {cards_location: '', ".png": ''}
     for i in range(0, len(cards)):
         for key, value in char_to_replace.items():
             cards[i] = cards[i].replace(key, value)
